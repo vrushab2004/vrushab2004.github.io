@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<!--
+  index.html — Structure and content of the portfolio
+  =====================================================
+  This file contains only the HTML (the skeleton / content).
+  Styling → styles.css
+  Behaviour → script.js
+
+  HOW TO FIND THINGS FAST:
+    Ctrl+F → "SECTION:" to jump to a section
+    Ctrl+F → "CUSTOMIZE" to find spots you'll want to edit
+
+  TABLE OF CONTENTS
+  -----------------
+  • <head>    — page title, links to CSS file
+  • <body>
+      • Rain canvas
+      • Navbar
+      • SECTION: Hero
+      • SECTION: Skills
+      • SECTION: Projects
+      • SECTION: About
+      • SECTION: Contact
+      • Footer
+  • <script>  — link to JS file
+
+  COMMON EDITS:
+    Change your name      → search "Vrushabh Jain" and replace
+    Change GitHub URL     → search "href="#"" in the project cards
+    Add a project         → copy a .project-card block in the Projects section
+    Add a skill tag       → add <span class="tag">Name</span> inside any .card
+    Change theme colors   → open styles.css, look at section 1 (Theme Colors)
+    Change terminal text  → open script.js, look at the `lines` array
+-->
+<html lang="en" data-theme="dark">
+<!--
+  data-theme="dark" is the starting theme.
+  styles.css reads this to decide which color set to use.
+  script.js flips it between "dark" and "light" on button click.
+-->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CUSTOMIZE: this text appears in the browser tab -->
+  <title>Vrushabh Jain A | Data Engineer</title>
+
+  <!--
+    This one line loads all the styles from styles.css.
+    The href path is relative — "styles.css" means "same folder as this file".
+  -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ================================================================
+       RAIN CANVAS
+       An invisible full-screen drawing board.
+       script.js draws animated rain drops on it when toggled on.
+       It's placed first so it sits visually behind all other elements.
+  ================================================================ -->
+  <canvas id="rain-canvas"></canvas>
+
+
+  <!-- ================================================================
+       NAVBAR
+       CUSTOMIZE: update the logo text and add/remove nav links.
+       Each href="#id" scrolls smoothly to the matching section below.
+  ================================================================ -->
+  <nav>
+    <div class="nav-inner">
+
+      <!-- Logo — left side. CUSTOMIZE: change this text -->
+      <span class="nav-logo mono">Select* From VrushabhJainAnil ;</span>
+
+      <!-- Navigation links — center
+           To add a link: copy a <li> and update the href and label.
+           The href must match an id="..." on a section below. -->
+      <ul class="nav-links">
+        <li><a href="#hero">home</a></li>
+        <li><a href="#skills">skills</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#about">about</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+
+      <!-- Toggle buttons — right side -->
+      <div class="nav-controls">
+
+        <!--
+          DARK / LIGHT MODE BUTTON
+          onclick="toggleTheme()" calls the function in script.js.
+          The button label updates automatically via JavaScript.
+        -->
+        <button class="ctrl-btn" id="theme-btn" onclick="toggleTheme()">
+          🌙 dark
+        </button>
+
+        <!--
+          RAIN EFFECT BUTTON
+          onclick="toggleRain()" calls the function in script.js.
+          Gets a green "active" style when rain is running.
+        -->
+        <button class="ctrl-btn" id="rain-btn" onclick="toggleRain()">
+          🌧 rain
+        </button>
+
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ================================================================
+       MAIN CONTENT
+  ================================================================ -->
+  <main>
+
+    <!-- ================================================================
+         SECTION: HERO
+         CUSTOMIZE: name, role, bio paragraph, and button links.
+    ================================================================ -->
+    <section id="hero">
+
+      <!-- Left column: text -->
+      <div>
+        <div class="hero-comment mono">// hello, world</div>
+
+        <!-- CUSTOMIZE: your name -->
+        <h1 class="hero-name">Vrushabh Jain Anil</h1>
+
+        <!-- CUSTOMIZE: your role / job title -->
+        <div class="hero-role mono">Data &amp; Analytics Engineer</div>
+        <!-- Note: &amp; is the safe HTML way to write the & symbol -->
+
+        <!-- CUSTOMIZE: your short bio / tagline -->
+        <p class="hero-bio">
+          I build reliable data pipelines, scalable analytics platforms, and transform
+          raw data into actionable insights. Passionate about the modern data stack,
+          data quality, and engineering best practices.
+        </p>
+
+        <div class="btn-row">
+          <a href="#projects" class="btn btn-primary">view projects →</a>
+          <a href="#" class="btn btn-primary">CV/Resume →</a>
+          <a href="#about"    class="btn btn-outline">about me</a>
+          <a href="https://github.com/vrushab2004" class="btn btn-outline" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Right column: animated terminal
+           script.js fills the #terminal-body div with the typing animation.
+           To change what it types, open script.js and edit the `lines` array. -->
+      <div class="terminal">
+        <div class="term-bar">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <!-- CUSTOMIZE: terminal window title -->
+          <span class="term-title">vrushabh@portfolio: ~</span>
+        </div>
+        <div class="term-body" id="terminal-body">
+          <!-- JavaScript writes into this div -->
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ================================================================
+         SECTION: SKILLS / TECH STACK
+         CUSTOMIZE: to add a new category → copy one .card block.
+                    to add a skill tag   → add <span class="tag">Name</span>
+                    to remove a tag      → delete its <span class="tag"> line
+    ================================================================ -->
+    <section id="skills">
+
+      <div class="sec-label mono"><span class="hash">## </span><span class="label">tech_stack</span></div>
+      <h2>Skills &amp; Tools</h2>
+
+      <div class="grid-4">
+
+        <!-- ── Skill Card: Languages ── -->
+        <div class="card">
+          <div class="card-cat">Languages</div>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">SQL</span>
+          </div>
+        </div>
+
+        <!-- ── Skill Card: Data Engineering ── -->
+        <div class="card">
+          <div class="card-cat">Data Engineering</div>
+          <div class="tags">
+            <span class="tag">Apache Airflow</span>
+            <span class="tag">dbt Core</span>
+            <span class="tag">ETL Pipelines</span>
+            <span class="tag">API Integration</span>
+          </div>
+        </div>
+
+        <!-- ── Skill Card: Databases ── -->
+        <div class="card">
+          <div class="card-cat">Databases</div>
+          <div class="tags">
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">BigQuery</span>
+          </div>
+        </div>
+
+        <!-- ── Skill Card: Cloud & Infrastructure ── -->
+        <div class="card">
+          <div class="card-cat">Cloud &amp; Infra</div>
+          <div class="tags">
+            <span class="tag">GCP</span>
+            <span class="tag">Docker</span>
+            <span class="tag">GitHub</span>
+          </div>
+        </div>
+
+        <!-- ── Skill Card: Libraries ── -->
+        <div class="card">
+          <div class="card-cat">Libraries</div>
+          <div class="tags">
+            <span class="tag">pandas</span>
+            <span class="tag">RapidFuzz</span>
+            <span class="tag">VADER</span>
+            <span class="tag">WordCloud</span>
+          </div>
+        </div>
+
+        <!-- ── Skill Card: BI & Visualization ── -->
+        <div class="card">
+          <div class="card-cat">BI &amp; Viz</div>
+          <div class="tags">
+            <span class="tag">Power BI</span>
+            <span class="tag">Streamlit</span>
+            <span class="tag">Plotly</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ================================================================
+         SECTION: PROJECTS
+         CUSTOMIZE:
+           Add a project    → copy one .project-card block, fill in details
+           Remove a project → delete the entire .project-card block
+           Add GitHub link  → replace href="#" with your real repo URL
+    ================================================================ -->
+    <section id="projects">
+      <div class="sec-label mono"><span class="hash">## </span><span class="label">featured_projects</span></div>
+      <h2>Projects</h2>
+
+      <div class="grid-3">
+
+        <!-- ── PROJECT 1 ────────────────────────────────────────── -->
+        <div class="project-card">
+          <div class="proj-header">
+            <span class="proj-year mono">2026</span>
+            <a href="https://github.com/vrushab2004/stream-chat-analyzer" class="proj-gh-link" target="_blank">↗ GitHub</a>
+          </div>
+          <div class="proj-title">Stream Chat Analyzer</div>
+          <p class="proj-desc">
+            Turning Twitch chaos into clarity. Built a 3-stage pipeline that parses raw
+            Twitch chat logs, scores every message with VADER sentiment analysis, and
+            surfaces the findings in an interactive Streamlit dashboard — so streamers
+            finally know when the crowd loved it, hated it, and what they kept typing.
+          </p>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">pandas</span>
+            <span class="tech-tag">VADER</span>
+            <span class="tech-tag">Streamlit</span>
+            <span class="tech-tag">Plotly</span>
+            <span class="tech-tag">WordCloud</span>
+          </div>
+          <a href="https://github.com/vrushab2004/stream-chat-analyzer" class="proj-link" target="_blank">View on GitHub →</a>
+        </div>
+
+        <!-- ── PROJECT 2 ────────────────────────────────────────── -->
+        <div class="project-card">
+          <div class="proj-header">
+            <span class="proj-year mono">2026</span>
+            <a href="https://github.com/vrushab2004/aus-vehicle-registrations-pipeline" class="proj-gh-link" target="_blank">↗ GitHub</a>
+          </div>
+          <div class="proj-title">Australian Vehicle Registrations Pipeline</div>
+          <p class="proj-desc">
+            From raw CSV to boardroom-ready insight. An end-to-end data engineering
+            pipeline processing 29K vehicle registrations through a full medallion
+            architecture — Python + RapidFuzz resolves 158 messy brand codes, BigQuery
+            hosts the warehouse, dbt drives Bronze→Silver→Gold transformations, and
+            Power BI delivers the final dashboard revealing Toyota's dominance and BYD's
+            rise.
+          </p>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">BigQuery</span>
+            <span class="tech-tag">dbt Core</span>
+            <span class="tech-tag">RapidFuzz</span>
+            <span class="tech-tag">Power BI</span>
+            <span class="tech-tag">GCP</span>
+          </div>
+          <a href="https://github.com/vrushab2004/aus-vehicle-registrations-pipeline" class="proj-link" target="_blank">View on GitHub →</a>
+        </div>
+
+        <!-- ── PROJECT 3 ────────────────────────────────────────── -->
+        <div class="project-card">
+          <div class="proj-header">
+            <span class="proj-year mono">2026</span>
+            <a href="https://github.com/vrushab2004/weather_etl_airflow" class="proj-gh-link" target="_blank">↗ GitHub</a>
+          </div>
+          <div class="proj-title">Weather ETL with Airflow</div>
+          <p class="proj-desc">
+            Weather data on autopilot, every single day. The V2 rebuild of the Australia
+            weather pipeline — now orchestrated by Apache Airflow. A timezone-aware cron
+            DAG fires daily at 3pm AEDT, pulls live conditions for 8 cities via the
+            Open-Meteo API, transforms with pandas, and loads to both PostgreSQL and CSV,
+            all running inside Docker.
+          </p>
+          <div class="tech-tags">
+            <span class="tech-tag">Apache Airflow</span>
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Docker</span>
+            <span class="tech-tag">PostgreSQL</span>
+            <span class="tech-tag">pandas</span>
+            <span class="tech-tag">Open-Meteo API</span>
+          </div>
+          <a href="https://github.com/vrushab2004/weather_etl_airflow" class="proj-link" target="_blank">View on GitHub →</a>
+        </div>
+
+        <!-- ── PROJECT 4 ────────────────────────────────────────── -->
+        <div class="project-card">
+          <div class="proj-header">
+            <span class="proj-year mono">2025</span>
+            <a href="https://github.com/vrushab2004/australia-weather-etl" class="proj-gh-link" target="_blank">↗ GitHub</a>
+          </div>
+          <div class="proj-title">Australia Weather ETL</div>
+          <p class="proj-desc">
+            Where it all started — ETL from scratch. The V1 foundation: a hand-built
+            pipeline that extracts Australian weather data from a REST API, parses the
+            JSON payload, transforms it with pandas for analysis, and loads to both
+            PostgreSQL and CSV. Simple, solid, and the project that started the
+            data engineering journey.
+          </p>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">PostgreSQL</span>
+            <span class="tech-tag">pandas</span>
+            <span class="tech-tag">REST API</span>
+            <span class="tech-tag">JSON</span>
+          </div>
+          <a href="https://github.com/vrushab2004/australia-weather-etl" class="proj-link" target="_blank">View on GitHub →</a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ================================================================
+         SECTION: ABOUT
+         CUSTOMIZE: bio paragraphs, initials in the avatar, social links.
+    ================================================================ -->
+    <section id="about">
+      <div class="sec-label mono"><span class="hash">## </span><span class="label">about_me</span></div>
+      <h2>About Me</h2>
+
+      <div class="about-grid">
+
+        <!-- Left column: avatar + social buttons -->
+        <div>
+          <!-- CUSTOMIZE: change "VJ" to your own initials -->
+          <div class="avatar">VJ</div>
+
+          <div class="about-social">
+            <a href="https://github.com/vrushab2004" class="btn btn-outline" target="_blank"
+               style="font-size:0.8rem; text-align:center;">GitHub</a>
+            <a href="#" class="btn btn-outline" target="_blank"
+               style="font-size:0.8rem; text-align:center;">LinkedIn</a>
+            <!-- CUSTOMIZE: update this email address if needed -->
+            <a href="mailto:shaiktalha41@gmail.com" class="btn btn-outline"
+               style="font-size:0.8rem; text-align:center;">Email me</a>
+          </div>
+        </div>
+
+        <!-- Right column: bio text -->
+        <div class="bio">
+          <!-- CUSTOMIZE: edit these paragraphs to tell your story -->
+          <p>
+            Hi, I'm <strong>Vrushabh Jain Anil Kumar</strong> — a Data Engineer and Analytics
+            Engineer with a focus on building robust, scalable data infrastructure.
+          </p>
+          <p>
+            I work across the full data engineering lifecycle: designing ingestion pipelines,
+            building transformation layers with <span class="hl-green">dbt</span>, orchestrating
+            workflows with <span class="hl-green">Airflow</span>, and making data accessible to
+            analysts through clean, well-documented data models.
+          </p>
+          <p>
+            I care deeply about <span class="hl-amber">data quality</span>,
+            <span class="hl-amber">documentation</span>, and treating data pipelines like
+            production software — with tests, CI/CD, and proper monitoring.
+            Bad data costs more than no data.
+          </p>
+          <p>
+            Outside of work, I write about the modern data stack, share SQL patterns, and
+            contribute to open-source data tooling.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ================================================================
+         SECTION: CONTACT
+         CUSTOMIZE: update the email href and social link hrefs.
+    ================================================================ -->
+    <section id="contact">
+      <div class="contact-box">
+        <div class="sec-label mono" style="margin-bottom:0.5rem">
+          <span class="hash">## </span><span class="label">get_in_touch</span>
+        </div>
+        <h2>Let's Connect</h2>
+        <p>
+          Open to data engineering roles, freelance projects, and interesting conversations
+          about data. The best way to reach me is email.
+        </p>
+        <div class="btn-row" style="justify-content: center;">
+          <a href="mailto:vrushabhjainanil@gmail.com" class="btn btn-primary">say hello →</a>
+          <a href="https://github.com/vrushab2004" class="btn btn-outline" target="_blank">GitHub</a>
+          <a href="https://www.linkedin.com/in/vrushabh-jain-a-b46427221/" class="btn btn-outline" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Footer -->
+  <footer>
+    <!-- CUSTOMIZE: update year or name here -->
+    <span class="mono">2026 Vrushabh Jain Anil Kumar</span>
+  </footer>
+
+
+  <!--
+    This one line loads all the JavaScript from script.js.
+    It's placed at the bottom of <body> so the HTML loads first,
+    then JS runs — this prevents errors from scripts running before
+    the page elements (like #terminal-body) exist.
+  -->
+  <script src="script.js"></script>
+
+</body>
+</html>

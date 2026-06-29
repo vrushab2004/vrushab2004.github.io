@@ -1,0 +1,624 @@
+/*
+  styles.css — All visual styling for the portfolio
+  ==================================================
+  HOW TO FIND THINGS FAST:
+    Ctrl+F → "SECTION:" to jump to a specific section's styles
+    Ctrl+F → "CUSTOMIZE" to find the spots you'll most likely want to edit
+
+  TABLE OF CONTENTS
+  -----------------
+  1.  Theme Colors  — dark/light mode color variables
+  2.  Reset & Base  — global defaults (font, spacing, links)
+  3.  Rain Canvas   — the full-screen background canvas
+  4.  Navbar        — top navigation bar
+  5.  Main Wrapper  — page centering
+  6.  Sections      — shared section spacing and headings
+  7.  SECTION: Hero          — name, bio, terminal widget
+  8.  SECTION: Skills        — 4-column card grid
+  9.  SECTION: Projects      — 3-column project cards
+  10. SECTION: About         — avatar + bio layout
+  11. SECTION: Contact       — contact box
+  12. Footer
+  13. Responsive             — tablet and phone layouts
+*/
+
+
+/* ================================================================
+   1. THEME COLORS
+   ================================================================
+   CSS variables work like named constants — define once, use everywhere.
+   We have two sets: one for dark mode, one for light mode.
+
+   The selector [data-theme="dark"] means:
+   "apply these rules when the <html> tag has data-theme='dark'".
+   JavaScript flips that attribute when you click the toggle button.
+
+   CUSTOMIZE: change the hex values below to restyle the whole site.
+   Every color on the page comes from one of these variables.
+================================================================ */
+
+/* --- DARK MODE (default) --- */
+[data-theme="dark"] {
+  --bg:           #090c14;              /* main page background */
+  --bg-card:      #0e1220;              /* card / widget backgrounds */
+  --bg-nav:       rgba(9, 12, 20, 0.85); /* navbar — slightly transparent */
+  --border:       #1e2a3a;              /* borders and dividers */
+  --text:         #e2e8f0;              /* main readable text */
+  --text-dim:     #94a3b8;              /* secondary / muted text */
+  --text-muted:   #64748b;              /* very quiet text (dates, labels) */
+  --green:        #10ff80;              /* accent green — links, highlights */
+  --amber:        #fbbf24;              /* accent amber — tags, category labels */
+  --terminal-bg:  #0a0e1a;              /* terminal widget stays dark always */
+}
+
+/* --- LIGHT MODE --- */
+[data-theme="light"] {
+  --bg:           #f8fafc;
+  --bg-card:      #ffffff;
+  --bg-nav:       rgba(248, 250, 252, 0.92);
+  --border:       #e2e8f0;
+  --text:         #0f172a;
+  --text-dim:     #475569;
+  --text-muted:   #94a3b8;
+  --green:        #059669;              /* darker green — readable on white */
+  --amber:        #d97706;
+  --terminal-bg:  #1e293b;              /* keep terminal dark even in light mode */
+}
+
+
+/* ================================================================
+   2. RESET & BASE
+   ================================================================
+   "Reset" removes browser default spacing so everything looks
+   consistent across Chrome, Firefox, Edge, Safari, etc.
+================================================================ */
+*, *::before, *::after {
+  box-sizing: border-box; /* padding doesn't add to element's total width */
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth; /* nav links scroll smoothly instead of jumping */
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  /* System font stack — picks the best native font for each OS */
+  font-family: 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease; /* smooth theme switch */
+}
+
+/* Monospace class — used for code/terminal-looking text */
+.mono {
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'Courier New', monospace;
+}
+
+a {
+  color: var(--green);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+
+/* ================================================================
+   3. RAIN CANVAS
+   ================================================================
+   The canvas sits BEHIND everything at z-index 0.
+   All page content is at z-index 1 so it draws on top.
+   pointer-events: none means clicks pass through the canvas
+   and reach the page elements underneath it.
+================================================================ */
+#rain-canvas {
+  position: fixed;       /* stays in place even when you scroll */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;  /* clicks pass through */
+  z-index: 0;
+  display: none;         /* hidden until you click the rain button */
+}
+
+
+/* ================================================================
+   4. NAVBAR
+================================================================ */
+nav {
+  position: sticky; /* sticks to the top of the screen while scrolling */
+  top: 0;
+  z-index: 100;     /* must be above everything, including rain canvas */
+  background-color: var(--bg-nav);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);         /* frosted-glass blur */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  gap: 1rem;
+}
+
+/* Logo text on the left */
+.nav-logo {
+  font-size: 0.85rem;
+  color: var(--green);
+  font-weight: 600;
+  white-space: nowrap;
+  /* CUSTOMIZE: edit the logo text in index.html, search for "nav-logo" */
+}
+
+/* Navigation links in the middle */
+.nav-links {
+  display: flex;
+  gap: 1.75rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+.nav-links a:hover {
+  color: var(--green);
+  text-decoration: none;
+}
+
+/* Container for the two toggle buttons on the right */
+.nav-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Shared style for both the theme and rain buttons */
+.ctrl-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.ctrl-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+/* JavaScript adds "active" class to the rain button when rain is ON */
+.ctrl-btn.active {
+  background: var(--green);
+  color: #000;
+  border-color: var(--green);
+  font-weight: 600;
+}
+
+
+/* ================================================================
+   5. MAIN CONTENT WRAPPER
+   Centers page content and sits above the rain canvas.
+================================================================ */
+main {
+  position: relative;
+  z-index: 1;           /* above rain canvas (z-index 0) */
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+
+/* ================================================================
+   6. SECTIONS — shared spacing and heading styles
+================================================================ */
+section {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--border); /* divider line between sections */
+}
+section:last-child {
+  border-bottom: none; /* no divider after the last section */
+}
+
+/* The "## snake_case" label above each section heading */
+.sec-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+.sec-label .hash  { color: var(--text-muted); }
+.sec-label .label { color: var(--amber); }
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+
+
+/* ================================================================
+   7. SECTION: HERO
+   Two-column grid: left = text, right = terminal widget.
+   Collapses to one column on smaller screens (see responsive section).
+================================================================ */
+#hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equal columns */
+  gap: 3rem;
+  align-items: center;
+  min-height: calc(100vh - 56px); /* fill the full viewport height */
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.hero-comment {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+/* CUSTOMIZE: controls the size of your name in the hero */
+.hero-name {
+  font-size: clamp(2rem, 4vw, 3.25rem); /* clamp = scales between 2rem and 3.25rem */
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+/* CUSTOMIZE: your role/title text color is var(--green) */
+.hero-role {
+  color: var(--green);
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-bio {
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1.75;
+  margin-bottom: 2rem;
+  max-width: 44ch; /* "ch" = width of "0" character; limits line length */
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap; /* buttons wrap to next line on small screens */
+}
+
+/* Shared button base */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+/* Solid green "call to action" button */
+.btn-primary {
+  background: var(--green);
+  color: #000;
+  border-color: var(--green);
+}
+.btn-primary:hover { opacity: 0.85; text-decoration: none; }
+
+/* Transparent button with border */
+.btn-outline {
+  background: transparent;
+  color: var(--text-dim);
+  border-color: var(--border);
+}
+.btn-outline:hover {
+  border-color: var(--green);
+  color: var(--green);
+  text-decoration: none;
+}
+
+/* ── Terminal widget ── */
+.terminal {
+  background: var(--terminal-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.82rem;
+}
+
+/* The macOS-style top bar with traffic-light dots */
+.term-bar {
+  background: #16202e;
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* The three colored circles (decorative — they don't do anything) */
+.dot        { width: 12px; height: 12px; border-radius: 50%; }
+.dot-red    { background: #ff5f57; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green  { background: #28ca41; }
+
+.term-title {
+  margin-left: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-family: monospace;
+}
+
+/* The scrollable body of the terminal */
+.term-body {
+  padding: 1rem;
+  min-height: 230px;
+  line-height: 1.8;
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+}
+
+/* A single line row inside the terminal */
+.t-line { display: flex; align-items: baseline; gap: 0.5rem; }
+.t-ps1  { color: var(--green); }  /* the $ prompt symbol */
+.t-cmd  { color: #e2e8f0; }       /* typed command text */
+.t-out  {                          /* output / response text */
+  color: var(--text-muted);
+  padding-left: 1.25rem;
+  font-size: 0.78rem;
+}
+
+/* Blinking block cursor at the end of the terminal */
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: var(--green);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+
+/* ================================================================
+   8. SECTION: SKILLS — card grid
+================================================================ */
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+/* Card — used for skill cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.card:hover {
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+
+/* Category label inside a skill card */
+.card-cat {
+  font-family: monospace;
+  color: var(--amber);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+}
+
+/* Container for skill tags inside a card */
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+/* Individual skill pill/badge */
+.tag {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+
+/* ================================================================
+   9. SECTION: PROJECTS — 3-column grid of project cards
+================================================================ */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+  gap: 1.25rem;
+}
+
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column; /* stacks children vertically */
+  gap: 0.75rem;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.project-card:hover {
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+
+/* Row at the top of a project card: year on left, GitHub link on right */
+.proj-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.proj-year {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.proj-gh-link {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+.proj-gh-link:hover { color: var(--green); text-decoration: none; }
+
+.proj-title {
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.proj-desc {
+  font-size: 0.86rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+  flex: 1; /* "flex: 1" makes this grow to fill space, pushing tags + link to bottom */
+}
+
+/* Tech tag row inside a project card */
+.tech-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+/* Green-tinted tech tag pill */
+.tech-tag {
+  background: rgba(16, 255, 128, 0.07);
+  border: 1px solid rgba(16, 255, 128, 0.2);
+  color: var(--green);
+  font-family: monospace;
+  font-size: 0.68rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.proj-link {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+.proj-link:hover { color: var(--green); }
+
+
+/* ================================================================
+   10. SECTION: ABOUT
+================================================================ */
+/* Two-column layout: avatar column + bio column */
+.about-grid {
+  display: grid;
+  grid-template-columns: auto 1fr; /* left column is as wide as its content */
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Round avatar circle showing initials */
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* Social link buttons stacked below the avatar */
+.about-social {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bio p {
+  color: var(--text-dim);
+  line-height: 1.85;
+  margin-bottom: 1rem;
+}
+
+/* Highlighted spans inside bio text */
+.hl-green { color: var(--green); font-weight: 500; }
+.hl-amber { color: var(--amber); font-weight: 500; }
+
+
+/* ================================================================
+   11. SECTION: CONTACT
+================================================================ */
+.contact-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3rem;
+  text-align: center;
+}
+
+.contact-box p {
+  color: var(--text-dim);
+  margin: 1rem auto 1.75rem;
+  max-width: 50ch;
+  line-height: 1.75;
+}
+
+
+/* ================================================================
+   12. FOOTER
+================================================================ */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 1.5rem;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+
+/* ================================================================
+   13. RESPONSIVE BREAKPOINTS
+   ================================================================
+   @media rules apply ONLY when the screen is narrower than the value.
+   "max-width: 900px" covers tablets and large phones.
+   "max-width: 600px" covers small phones.
+
+   Inside these blocks you override earlier rules — for example,
+   changing a 4-column grid to 2 columns on tablets.
+================================================================ */
+@media (max-width: 900px) {
+  #hero       { grid-template-columns: 1fr; min-height: auto; } /* stack hero vertically */
+  .grid-4     { grid-template-columns: repeat(2, 1fr); }        /* 4 cols → 2 cols */
+  .grid-3     { grid-template-columns: repeat(2, 1fr); }        /* 3 cols → 2 cols */
+  .about-grid { grid-template-columns: 1fr; }                   /* stack about vertically */
+}
+
+@media (max-width: 600px) {
+  .grid-4      { grid-template-columns: 1fr; }   /* 2 cols → 1 col on phones */
+  .grid-3      { grid-template-columns: 1fr; }
+  .nav-links   { display: none; }               /* hide nav links — too cramped */
+  .contact-box { padding: 1.5rem; }
+}
